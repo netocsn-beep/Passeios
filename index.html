@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Excursão Marudá - Sistema de Reservas</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#e9f5ff;
+    padding:15px;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 0 20px rgba(0,0,0,0.2);
+}
+
+.topo{
+    background:linear-gradient(45deg,#0099ff,#00ccff);
+    color:white;
+    padding:30px;
+    text-align:center;
+}
+
+.topo h1{
+    font-size:40px;
+    margin-bottom:10px;
+}
+
+.topo p{
+    font-size:18px;
+}
+
+.banner{
+    width:100%;
+    overflow:hidden;
+}
+
+.banner img{
+    width:100%;
+    display:block;
+}
+
+.info,
+.regras{
+    padding:20px;
+}
+
+.info{
+    background:#f7fbff;
+    border-bottom:2px solid #ddd;
+}
+
+.regras{
+    background:#fff8e1;
+    border-bottom:2px solid #ddd;
+}
+
+.info h2,
+.regras h2,
+.tituloSecao{
+    margin-bottom:15px;
+    color:#0099ff;
+}
+
+.regras ul{
+    padding-left:20px;
+    line-height:1.8;
+}
+
+.info p{
+    line-height:1.8;
+}
+
+.painel{
+    padding:20px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:10px;
+}
+
+.painel input,
+.painel select,
+.painel textarea,
+.painel button{
+    padding:12px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    font-size:16px;
+}
+
+.painel textarea{
+    min-height:220px;
+    resize:vertical;
+}
+
+.painel button{
+    background:#0099ff;
+    color:white;
+    border:none;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.painel button:hover{
+    background:#0077cc;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#0099ff;
+    color:white;
+    padding:15px;
+}
+
+td{
+    padding:12px;
+    text-align:center;
+    border-bottom:1px solid #ddd;
+}
+
+.reservado{
+    background:#ffd6d6;
+}
+
+.disponivel{
+    background:#d9ffd9;
+}
+
+.pendente{
+    background:#fff5cc;
+}
+
+.acoes button{
+    margin:2px;
+    padding:6px 10px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.btnEditar{
+    background:#ffcc00;
+}
+
+.btnExcluir{
+    background:#ff4d4d;
+    color:white;
+}
+
+.whatsapp{
+    position:fixed;
+    right:20px;
+    background:#25D366;
+    color:white;
+    padding:15px 20px;
+    border-radius:50px;
+    cursor:pointer;
+    font-weight:bold;
+    box-shadow:0 0 10px rgba(0,0,0,0.3);
+    z-index:999;
+}
+
+.btnLista{
+    bottom:20px;
+}
+
+.btnLivres{
+    bottom:90px;
+    background:#ff9800;
+}
+
+.rodape{
+    background:#f1f1f1;
+    padding:20px;
+    text-align:center;
+    font-weight:bold;
+}
+
+@media(max-width:700px){
+
+    .topo h1{
+        font-size:28px;
+    }
+
+    table{
+        font-size:14px;
+    }
+
+    td, th{
+        padding:8px;
+    }
+
+    .painel{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="topo">
+
+        <h1>🏖️ Excursão Marudá</h1>
+
+        <p>
+            📅 23 de Agosto • 🚌 Saída às 05:00<br>
+            📍 Praça do Rosário - Jaderlândia
+        </p>
+
+    </div>
+
+    <!-- BANNER -->
+
+    <div class="banner">
+
+        <img src="1000269665.png">
+
+    </div>
+
+    <!-- INFORMAÇÕES -->
+
+    <div class="info">
+
+        <h2>📋 Informações</h2>
+
+        <p>💰 Valor: R$60 ida e volta</p>
+
+        <p>💺 Cadeiras marcadas</p>
+
+        <p>💵 50% antecipado</p>
+
+        <p>📆 Restante até dia 15</p>
+
+        <p>👶 Criança acima de 5 anos paga meia</p>
+
+    </div>
+
+    <!-- REGRAS -->
+
+    <div class="regras">
+
+        <h2>⚠️ Regras</h2>
+
+        <ul>
+
+            <li>Ônibus sairá exatamente às 05:00</li>
+
+            <li>Não haverá espera para atrasos</li>
+
+            <li>Proibido brigas e desrespeito</li>
+
+            <li>Mantenha o ônibus limpo</li>
+
+        </ul>
+
+    </div>
+
+    <!-- RESERVA -->
+
+    <h2 class="tituloSecao"
+    style="padding:20px 20px 0;">
+
+        ➕ Reservar Passageiro
+
+    </h2>
+
+    <div class="painel">
+
+        <input type="number"
+        id="cadeira"
+        placeholder="Número da cadeira">
+
+        <input type="text"
+        id="nome"
+        placeholder="Nome do passageiro">
+
+        <select id="status">
+
+            <option value="Reservado">
+                Reservado
+            </option>
+
+            <option value="Pagamento Pendente">
+                Pagamento Pendente
+            </option>
+
+            <option value="Disponível">
+                Disponível
+            </option>
+
+        </select>
+
+        <button onclick="salvar()">
+
+            ➕ Salvar Reserva
+
+        </button>
+
+    </div>
+
+    <!-- BILHETE -->
+
+    <h2 class="tituloSecao"
+    style="padding:20px 20px 0;">
+
+        🎫 Bilhete Automático
+
+    </h2>
+
+    <div class="painel">
+
+        <input type="text"
+        id="bilheteNome"
+        placeholder="Nome do passageiro"
+        readonly>
+
+        <input type="text"
+        id="bilheteCadeira"
+        placeholder="Número da cadeira"
+        readonly>
+
+        <textarea
+        id="bilheteTexto"
+        readonly></textarea>
+
+        <button onclick="compartilharBilhete()">
+
+            📲 Compartilhar Bilhete
+
+        </button>
+
+    </div>
+
+    <!-- LISTA -->
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Cadeira</th>
+
+                <th>Nome</th>
+
+                <th>Status</th>
+
+                <th>Ações</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody id="lista"></tbody>
+
+    </table>
+
+    <div class="rodape">
+
+        Organização:
+        Netto Costa e Alex Costa
+
+    </div>
+
+</div>
+
+<!-- BOTÃO LISTA -->
+
+<div class="whatsapp btnLista"
+onclick="enviarWhatsApp()">
+
+📲 Compartilhar Lista
+
+</div>
+
+<!-- BOTÃO LIVRES -->
+
+<div class="whatsapp btnLivres"
+onclick="enviarDisponiveis()">
+
+💺 Divulgar Cadeiras Livres
+
+</div>
+
+<script>
+
+/* ========================= */
+/* LISTA DE CADEIRAS */
+/* ========================= */
+
+let cadeiras = [];
+
+for(let i=1;i<=56;i++){
+
+    cadeiras.push({
+
+        numero:i,
+        nome:"Livre",
+        status:"Disponível"
+
+    });
+
+}
+
+/* RESERVADOS */
+
+cadeiras[0] = {
+    numero:1,
+    nome:"Netto Costa",
+    status:"Reservado"
+};
+
+cadeiras[1] = {
+    numero:2,
+    nome:"Marilene",
+    status:"Reservado"
+};
+
+cadeiras[2] = {
+    numero:3,
+    nome:"Alex Costa",
+    status:"Reservado"
+};
+
+cadeiras[3] = {
+    numero:4,
+    nome:"Daniel",
+    status:"Reservado"
+};
+
+cadeiras[4] = {
+    numero:5,
+    nome:"Netto Costa",
+    status:"Reservado"
+};
+
+cadeiras[5] = {
+    numero:6,
+    nome:"Alex Costa",
+    status:"Reservado"
+};
+
+/* ========================= */
+/* RENDERIZAR */
+/* ========================= */
+
+function renderizar(){
+
+    const lista =
+    document.getElementById("lista");
+
+    lista.innerHTML = "";
+
+    cadeiras.forEach((c,index)=>{
+
+        let classe = "disponivel";
+
+        if(c.status == "Reservado"){
+
+            classe = "reservado";
+
+        }
+
+        if(c.status == "Pagamento Pendente"){
+
+            classe = "pendente";
+
+        }
+
+        lista.innerHTML += `
+
+        <tr class="${classe}">
+
+            <td>${c.numero}</td>
+
+            <td>${c.nome}</td>
+
+            <td>${c.status}</td>
+
+            <td class="acoes">
+
+                <button class="btnEditar"
+                onclick="editar(${index})">
+
+                    Editar
+
+                </button>
+
+                <button class="btnExcluir"
+                onclick="limpar(${index})">
+
+                    Limpar
+
+                </button>
+
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+}
+
+/* ========================= */
+/* SALVAR */
+/* ========================= */
+
+function salvar(){
+
+    const cadeira =
+    parseInt(
+        document.getElementById("cadeira").value
+    );
+
+    const nome =
+    document.getElementById("nome").value;
+
+    const status =
+    document.getElementById("status").value;
+
+    if(!cadeira || cadeira < 1 || cadeira > 56){
+
+        alert("Escolha uma cadeira válida!");
+
+        return;
+
+    }
+
+    cadeiras[cadeira - 1] = {
+
+        numero:cadeira,
+        nome:nome || "Livre",
+        status:status
+
+    };
+
+    salvarLocal();
+
+    renderizar();
+
+    gerarBilhete(
+        nome,
+        cadeira,
+        status
+    );
+
+    limparCampos();
+
+}
+
+/* ========================= */
+/* EDITAR */
+/* ========================= */
+
+function editar(index){
+
+    document.getElementById("cadeira").value =
+    cadeiras[index].numero;
+
+    document.getElementById("nome").value =
+    cadeiras[index].nome;
+
+    document.getElementById("status").value =
+    cadeiras[index].status;
+
+}
+
+/* ========================= */
+/* LIMPAR */
+/* ========================= */
+
+function limpar(index){
+
+    cadeiras[index] = {
+
+        numero:index + 1,
+        nome:"Livre",
+        status:"Disponível"
+
+    };
+
+    salvarLocal();
+
+    renderizar();
+
+}
+
+/* ========================= */
+/* LIMPAR CAMPOS */
+/* ========================= */
+
+function limparCampos(){
+
+    document.getElementById("cadeira").value = "";
+
+    document.getElementById("nome").value = "";
+
+    document.getElementById("status").value =
+    "Reservado";
+
+}
+
+/* ========================= */
+/* LOCAL STORAGE */
+/* ========================= */
+
+function salvarLocal(){
+
+    localStorage.setItem(
+        "cadeirasMaruda",
+        JSON.stringify(cadeiras)
+    );
+
+}
+
+function carregarLocal(){
+
+    const dados =
+    localStorage.getItem("cadeirasMaruda");
+
+    if(dados){
+
+        cadeiras = JSON.parse(dados);
+
+    }
+
+}
+
+/* ========================= */
+/* BILHETE */
+/* ========================= */
+
+function gerarBilhete(nome,cadeira,status){
+
+    document.getElementById("bilheteNome").value =
+    nome;
+
+    document.getElementById("bilheteCadeira").value =
+    cadeira;
+
+    const texto =
+
+`🏖️ EXCURSÃO MARUDÁ
+
+🎫 BILHETE DO PASSAGEIRO
+
+👤 Nome:
+${nome}
+
+💺 Cadeira:
+${cadeira}
+
+📌 Status:
+${status}
+
+📅 Data:
+23 de Agosto
+
+🚌 Saída:
+05:00 da manhã
+
+📍 Local:
+Praça do Rosário - Jaderlândia
+
+💰 Valor:
+R$60 ida e volta
+
+⚠️ REGRAS
+
+• 50% antecipado
+• Restante até dia 15
+• Criança acima de 5 anos paga meia
+• Cadeiras marcadas
+• Não haverá espera para atrasos
+
+👥 Organização:
+Netto Costa e Alex Costa
+
+🔗 Grupo WhatsApp:
+https://chat.whatsapp.com/HWmeKQwkAxxLSYCyLRfdGV`;
+
+    document.getElementById("bilheteTexto").value =
+    texto;
+
+}
+
+/* ========================= */
+/* COMPARTILHAR BILHETE */
+/* ========================= */
+
+function compartilharBilhete(){
+
+    const texto =
+    document.getElementById("bilheteTexto").value;
+
+    if(!texto){
+
+        alert("Nenhum bilhete gerado!");
+
+        return;
+
+    }
+
+    const url =
+`https://wa.me/?text=${encodeURIComponent(texto)}`;
+
+    window.open(url,"_blank");
+
+}
+
+/* ========================= */
+/* COMPARTILHAR LISTA */
+/* ========================= */
+
+function enviarWhatsApp(){
+
+    let mensagem =
+`🏖️ *EXCURSÃO MARUDÁ*
+
+📋 *STATUS DAS CADEIRAS*
+
+`;
+
+    cadeiras.forEach(c => {
+
+        mensagem +=
+`💺 ${c.numero} - ${c.nome} (${c.status})
+`;
+
+    });
+
+    mensagem += `
+
+📅 Data:
+23 de Agosto
+
+📍 Praça do Rosário - Jaderlândia
+
+👥 Organização:
+Netto Costa e Alex Costa
+
+🔗 Grupo:
+https://chat.whatsapp.com/HWmeKQwkAxxLSYCyLRfdGV`;
+
+    const url =
+`https://wa.me/?text=${encodeURIComponent(mensagem)}`;
+
+    window.open(url,"_blank");
+
+}
+
+/* ========================= */
+/* DIVULGAR LIVRES */
+/* ========================= */
+
+function enviarDisponiveis(){
+
+    let mensagem =
+`🏖️ *EXCURSÃO MARUDÁ*
+
+💺 *CADEIRAS DISPONÍVEIS*
+
+`;
+
+    let livres = 0;
+
+    cadeiras.forEach(c => {
+
+        if(c.status == "Disponível"){
+
+            mensagem +=
+`✅ Cadeira ${c.numero}
+`;
+
+            livres++;
+
+        }
+
+    });
+
+    mensagem += `
+
+📊 Total livres:
+${livres} cadeiras
+
+💰 Valor:
+R$60 ida e volta
+
+📅 Data:
+23 de Agosto
+
+🚌 Saída:
+05:00 da manhã
+
+📍 Local:
+Praça do Rosário - Jaderlândia
+
+👶 Criança acima de 5 anos paga meia
+
+📲 Reserve agora:
+91 98101-8269
+
+🔗 Grupo WhatsApp:
+https://chat.whatsapp.com/HWmeKQwkAxxLSYCyLRfdGV
+
+👥 Organização:
+Netto Costa e Alex Costa`;
+
+    const url =
+`https://wa.me/?text=${encodeURIComponent(mensagem)}`;
+
+    window.open(url,"_blank");
+
+}
+
+/* ========================= */
+/* INICIAR */
+/* ========================= */
+
+carregarLocal();
+
+renderizar();
+
+</script>
+
+</body>
+</html>
